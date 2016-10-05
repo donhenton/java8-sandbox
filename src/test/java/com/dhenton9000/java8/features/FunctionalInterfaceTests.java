@@ -5,8 +5,12 @@
  */
 package com.dhenton9000.java8.features;
 
+import com.dhenton9000.java8.features.support.AgeClassroom;
+import com.dhenton9000.java8.features.support.Classroom;
+import com.dhenton9000.java8.features.support.NameClassroom;
 import com.dhenton9000.java8.features.support.Person;
 import com.dhenton9000.java8.features.support.PersonFactory;
+import com.dhenton9000.java8.functional.EnrollClass;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -20,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * https://www.tutorialspoint.com/java8/java8_functional_interfaces.htm
+ *
  * @author dhenton
  */
 public class FunctionalInterfaceTests {
@@ -73,10 +78,38 @@ public class FunctionalInterfaceTests {
         })
                 .map(myMapper)
                 .collect(Collectors.toList());
-        
+
         assertEquals(2, found.size());
         assertTrue(found.contains("Marnie Nixon"));
 
+    }
+
+    @Test
+    public void testCustomFunctionalInterface() {
+        Classroom nameClassroom = new NameClassroom();
+        Classroom ageClassroom = new AgeClassroom();
+
+        //this describes the body for the enroll method of functional
+        //interface EnrollClass
+        EnrollClass nameEnroll = (Classroom c, Person p) -> {
+            p.setName(p.getName().substring(0, 1));
+            c.add(p);
+
+        };
+        
+        EnrollClass ageEnroll = (Classroom c, Person p) -> {
+            p.setBirthday(LocalDate.now());
+            c.add(p);
+
+        };
+
+        f.getData().forEach(p -> nameEnroll.enroll(nameClassroom, p));
+
+        assertEquals(nameClassroom.display(), "F,J,T,M,D");
+
+        
+        f.getData().forEach(e -> ageEnroll.enroll(ageClassroom, e));
+        assertEquals(ageClassroom.display(), "0,0,0,0,0");
     }
 
 }
