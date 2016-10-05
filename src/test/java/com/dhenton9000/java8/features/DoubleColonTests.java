@@ -32,9 +32,7 @@ public class DoubleColonTests {
 
         List<String> t = f.getData().stream()
                 .map(DoubleColonTests::cutByHalf)
-                .map((i) -> {
-                    return i + "";
-                })
+                .map(Integer::toUnsignedString)
                 .collect(Collectors.toList());
         String zz = String.join(",", t);
         assertEquals("4,2,7,7,1",zz);
