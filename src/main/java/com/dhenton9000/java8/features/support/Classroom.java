@@ -11,7 +11,7 @@ package com.dhenton9000.java8.features.support;
  */
 public interface Classroom {
     
-    String display();
+    public String display();
 
     public void add(Person p);
 

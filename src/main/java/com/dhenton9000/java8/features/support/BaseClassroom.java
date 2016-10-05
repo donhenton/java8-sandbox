@@ -5,6 +5,7 @@
  */
 package com.dhenton9000.java8.features.support;
 
+import com.dhenton9000.java8.functional.EnrollClass;
 import java.util.ArrayList;
 
 /**
@@ -15,8 +16,7 @@ public abstract class BaseClassroom implements Classroom {
     
     private final ArrayList<Person> students = new ArrayList<Person>();
     
-     
-
+   
     @Override
     public void add(Person p) {
          getStudents().add(p);

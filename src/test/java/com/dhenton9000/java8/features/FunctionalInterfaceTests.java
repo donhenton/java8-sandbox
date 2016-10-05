@@ -7,6 +7,7 @@ package com.dhenton9000.java8.features;
 
 import com.dhenton9000.java8.features.support.AgeClassroom;
 import com.dhenton9000.java8.features.support.Classroom;
+import com.dhenton9000.java8.features.support.GeneralClassroom;
 import com.dhenton9000.java8.features.support.NameClassroom;
 import com.dhenton9000.java8.features.support.Person;
 import com.dhenton9000.java8.features.support.PersonFactory;
@@ -96,7 +97,7 @@ public class FunctionalInterfaceTests {
             c.add(p);
 
         };
-        
+
         EnrollClass ageEnroll = (Classroom c, Person p) -> {
             p.setBirthday(LocalDate.now());
             c.add(p);
@@ -107,9 +108,49 @@ public class FunctionalInterfaceTests {
 
         assertEquals(nameClassroom.display(), "F,J,T,M,D");
 
-        
         f.getData().forEach(e -> ageEnroll.enroll(ageClassroom, e));
-        assertEquals(ageClassroom.display(), "0,0,0,0,0");
+        assertEquals("0,0,0,0,0", ageClassroom.display());
+    }
+
+    @Test
+    public void testCustomFunctionalInterfaceForDisplayName() {
+
+        Function<List<Person>, String> nameDisplayMethod = (List<Person> students)
+                -> {
+
+            List<String> t = students.stream().map(s -> {
+                return s.getName().substring(0, 1);
+            }).collect(Collectors.toList());
+
+            return String.join(",", t);
+        };
+
+        Classroom generalRoom = new GeneralClassroom(nameDisplayMethod);
+        f.getData().forEach(p -> generalRoom.add(p));
+
+        assertEquals("F,J,T,M,D", generalRoom.display());
+
+    }
+
+    @Test
+    public void testCustomFunctionalInterfaceForDisplayAge() {
+
+        Function<List<Person>, String> ageDisplayMethod = (List<Person> students)
+                -> {
+
+            List<String> t = students.stream().map(s -> {
+                s.setBirthday(LocalDate.now());
+                return s.getAge() + "";
+            }).collect(Collectors.toList());
+
+            return String.join(",", t);
+        };
+
+        Classroom generalRoom = new GeneralClassroom(ageDisplayMethod);
+        f.getData().forEach(p -> generalRoom.add(p));
+
+        assertEquals("0,0,0,0,0", generalRoom.display());
+
     }
 
 }
