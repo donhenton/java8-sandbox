@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Consumer;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,7 +120,9 @@ public class OptionalTests {
     public void testIfOptional() {
 
         final List<String> tList = new ArrayList<String>();
-        personSource.findOptional(5).ifPresent(p -> tList.add(p.getName()));
+          
+        Consumer<Person> proc = (p -> tList.add(p.getName()));
+        personSource.findOptional(5).ifPresent(proc);
         assertEquals(p1.getName(), tList.get(0));
 
     }
